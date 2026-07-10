@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Lọc Dữ Liệu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .vung {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .ket-qua-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #btn-copy {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+        #btn-copy:hover {
+            background-color: #218838;
+        }
+        #btn-copy:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        #ket-qua {
+            background-color: #f0f8ff;
+            border-left: 4px solid #007bff;
+            min-height: 50px;
+            white-space: pre-line; /* Giữ nguyên xuống dòng */
+            font-family: monospace;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>BỘ LỌC DỮ LIỆU</h2>
+
+    <div class="vung">
+        <label for="tim-kiem">Vùng 1: Ô tìm kiếm (Nhập từ khóa)</label>
+        <input type="text" id="tim-kiem" placeholder="Nhập ký tự cần tìm (Ví dụ: 4951)..." oninput="locDuLieu()">
+    </div>
+
+    <div class="vung">
+        <label for="input-data">Vùng 2: Dán Data vào đây</label>
+        <textarea id="input-data" rows="10" placeholder="Dán dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
+    </div>
+
+    <div class="vung">
+        <div class="ket-qua-header">
+            <label style="margin-bottom: 0;">Vùng 3: Kết quả hiển thị</label>
+            <button id="btn-copy" onclick="copyTatCa()" disabled>Copy All</button>
+        </div>
+        <div id="ket-qua" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">Chờ nhập dữ liệu và từ khóa...</div>
+    </div>
+</div>
+
+<script>
+// Biến toàn cục để lưu trữ mảng kết quả phục vụ cho việc copy
+let kếtQuảHiệnTại = [];
+
+function locDuLieu() {
+    const tuKhoa = document.getElementById('tim-kiem').value.trim().toLowerCase();
+    const dataGoc = document.getElementById('input-data').value;
+    const vungKetQua = document.getElementById('ket-qua');
+    const btnCopy = document.getElementById('btn-copy');
+
+    // Nếu dữ liệu trống hoặc chưa nhập từ khóa thì reset
+    if (!dataGoc || !tuKhoa) {
+        vungKetQua.innerHTML = "Chờ nhập dữ liệu và từ khóa...";
+        btnCopy.disabled = true;
+        kếtQuảHiệnTại = [];
+        return;
+    }
+
+    // Tách dữ liệu thành các khối dựa trên hàng rào ━━━━━━
+    const cacKhoi = dataGoc.split(/━━━━━━+/);
+    kếtQuảHiệnTại = [];
+
+    cacKhoi.forEach(khoi => {
+        // Tách các dòng trong từng khối
+        const cacDong = khoi.split('\n').map(d => d.trim()).filter(d => d !== "");
+        
+        if (cacDong.length >= 2) {
+            const dongThongTin = cacDong[0].toLowerCase(); // Dòng chứa thông tin lọc
+            const dongMuiTen = cacDong[1]; // Dòng chứa ➜...
+
+            // Kiểm tra xem dòng thông tin có chứa từ khóa tìm kiếm không
+            if (dongThongTin.includes(tuKhoa) && dongMuiTen.startsWith('➜')) {
+                kếtQuảHiệnTại.push(dongMuiTen);
+            }
+        }
+    });
+
+    // Hiển thị kết quả ra màn hình và bật/tắt nút Copy
+    if (kếtQuảHiệnTại.length > 0) {
+        vungKetQua.innerText = kếtQuảHiệnTại.join('\n');
+        btnCopy.disabled = false; // Bật nút copy khi có kết quả
+    } else {
+        vungKetQua.innerHTML = "<span style='color: red;'>Không tìm thấy kết quả phù hợp!</span>";
+        btnCopy.disabled = true; // Tắt nút copy khi không có kết quả
+    }
+}
+
+function copyTatCa() {
+    if (kếtQuảHiệnTại.length === 0) return;
+
+    // Ghép các dòng kết quả lại bằng dấu xuống dòng
+    const vanBanCopy = kếtQuảHiệnTại.join('\n');
+
+    // Tiến hành copy vào Clipboard
+    navigator.clipboard.writeText(vanBanCopy).then(() => {
+        const btnCopy = document.getElementById('btn-copy');
+        const textGoc = btnCopy.innerText;
+        
+        // Hiệu ứng đổi chữ thông báo thành công
+        btnCopy.innerText = "Đã sao chép! ✓";
+        btnCopy.style.backgroundColor = "#155724";
+        
+        // Trả lại trạng thái nút ban đầu sau 2 giây
+        setTimeout(() => {
+            btnCopy.innerText = textGoc;
+            btnCopy.style.backgroundColor = "#28a745";
+        }, 2000);
+    }).catch(err => {
+        alert('Lỗi khi sao chép: ', err);
+    });
+}
+</script>
+
+</body>
+</html>
