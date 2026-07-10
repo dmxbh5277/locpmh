@@ -3,105 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bộ Lọc Dữ Liệu</title>
+    <title>Hệ Thống Lọc Dữ Liệu PMH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-family-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #0066cc;
+            --primary-hover: #0052a3;
+            --bg-body: #f4f7fc;
+            --bg-card: #ffffff;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --success-color: #2b6cb0;
+            --success-bg: #ebf8ff;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-            background-color: #f9f9f9;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
         }
-        h2 {
-            color: #333;
-            text-align: center;
-        }
+
         .container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .vung {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        input[type="text"], textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            max-width: 850px;
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.08);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .vung {
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
             font-size: 14px;
         }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background-color: #f8fafc;
+            color: var(--text-main);
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--primary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.15);
+            outline: none;
+        }
+
         textarea {
             resize: vertical;
+            font-family: inherit;
         }
+
         .ket-qua-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
+
         #btn-copy {
-            background-color: #28a745;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 8px 18px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
             font-size: 13px;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 6px rgba(0, 102, 204, 0.15);
         }
+
         #btn-copy:hover {
-            background-color: #218838;
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 102, 204, 0.2);
         }
+
+        #btn-copy:active {
+            transform: translateY(0);
+        }
+
         #btn-copy:disabled {
-            background-color: #6c757d;
+            background-color: #cbd5e1;
+            color: #94a3b8;
             cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
+
         #ket-qua {
-            background-color: #f0f8ff;
-            border-left: 4px solid #007bff;
-            min-height: 50px;
-            white-space: pre-line; /* Giữ nguyên xuống dòng */
-            font-family: monospace;
-            font-size: 15px;
+            background-color: var(--success-bg);
+            border: 2px dashed #90cdf4;
+            border-radius: 10px;
+            min-height: 60px;
+            white-space: pre-line;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2b6cb0;
+            transition: all 0.3s ease;
+        }
+
+        .empty-state {
+            color: var(--text-muted);
+            font-style: italic;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>BỘ LỌC DỮ LIỆU</h2>
+    <h2><i class="fa-solid fa-filter"></i> BỘ LỌC DỮ LIỆU PMH</h2>
 
     <div class="vung">
-        <label for="tim-kiem">Vùng 1: Ô tìm kiếm (Nhập từ khóa)</label>
-        <input type="text" id="tim-kiem" placeholder="Nhập ký tự cần tìm (Ví dụ: 4951)..." oninput="locDuLieu()">
+        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm</label>
+        <input type="text" id="tim-kiem" placeholder="Nhập ký tự, mã số, tên cần tìm tại đây..." oninput="locDuLieu()">
     </div>
 
     <div class="vung">
-        <label for="input-data">Vùng 2: Dán Data vào đây</label>
-        <textarea id="input-data" rows="10" placeholder="Dán dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
+        <label for="input-data"><i class="fa-solid fa-clipboard-list" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 2: Nhập hoặc Dán chuỗi Data dữ liệu gốc</label>
+        <textarea id="input-data" rows="8" placeholder="Dán toàn bộ dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
     </div>
 
     <div class="vung">
         <div class="ket-qua-header">
-            <label style="margin-bottom: 0;">Vùng 3: Kết quả hiển thị</label>
-            <button id="btn-copy" onclick="copyTatCa()" disabled>Copy All</button>
+            <label style="margin-bottom: 0;"><i class="fa-solid fa-square-poll-horizontal" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 3: Kết quả lọc được</label>
+            <button id="btn-copy" onclick="copyTatCa()" disabled>
+                <i class="fa-solid fa-copy"></i> Copy All
+            </button>
         </div>
-        <div id="ket-qua" style="padding: 10px; border: 1px solid #ccc; border-radius: 4px;">Chờ nhập dữ liệu và từ khóa...</div>
+        <div id="ket-qua" style="padding: 15px;">
+            <span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>
+        </div>
     </div>
 </div>
 
 <script>
-// Biến toàn cục để lưu trữ mảng kết quả phục vụ cho việc copy
 let kếtQuảHiệnTại = [];
 
 function locDuLieu() {
@@ -110,63 +188,53 @@ function locDuLieu() {
     const vungKetQua = document.getElementById('ket-qua');
     const btnCopy = document.getElementById('btn-copy');
 
-    // Nếu dữ liệu trống hoặc chưa nhập từ khóa thì reset
     if (!dataGoc || !tuKhoa) {
-        vungKetQua.innerHTML = "Chờ nhập dữ liệu và từ khóa...";
+        vungKetQua.innerHTML = '<span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>';
         btnCopy.disabled = true;
         kếtQuảHiệnTại = [];
         return;
     }
 
-    // Tách dữ liệu thành các khối dựa trên hàng rào ━━━━━━
     const cacKhoi = dataGoc.split(/━━━━━━+/);
     kếtQuảHiệnTại = [];
 
     cacKhoi.forEach(khoi => {
-        // Tách các dòng trong từng khối
         const cacDong = khoi.split('\n').map(d => d.trim()).filter(d => d !== "");
         
         if (cacDong.length >= 2) {
-            const dongThongTin = cacDong[0].toLowerCase(); // Dòng chứa thông tin lọc
-            const dongMuiTen = cacDong[1]; // Dòng chứa ➜...
+            const dongThongTin = cacDong[0].toLowerCase();
+            const dongMuiTen = cacDong[1];
 
-            // Kiểm tra xem dòng thông tin có chứa từ khóa tìm kiếm không
             if (dongThongTin.includes(tuKhoa) && dongMuiTen.startsWith('➜')) {
                 kếtQuảHiệnTại.push(dongMuiTen);
             }
         }
     });
 
-    // Hiển thị kết quả ra màn hình và bật/tắt nút Copy
     if (kếtQuảHiệnTại.length > 0) {
         vungKetQua.innerText = kếtQuảHiệnTại.join('\n');
-        btnCopy.disabled = false; // Bật nút copy khi có kết quả
+        btnCopy.disabled = false;
     } else {
-        vungKetQua.innerHTML = "<span style='color: red;'>Không tìm thấy kết quả phù hợp!</span>";
-        btnCopy.disabled = true; // Tắt nút copy khi không có kết quả
+        vungKetQua.innerHTML = "<span style='color: #e53e3e; font-weight: 500;'>❌ Không tìm thấy kết quả nào trùng khớp!</span>";
+        btnCopy.disabled = true;
     }
 }
 
 function copyTatCa() {
     if (kếtQuảHiệnTại.length === 0) return;
 
-    // Ghép các dòng kết quả lại bằng dấu xuống dòng
     const vanBanCopy = kếtQuảHiệnTại.join('\n');
 
-    // Tiến hành copy vào Clipboard
     navigator.clipboard.writeText(vanBanCopy).then(() => {
         const btnCopy = document.getElementById('btn-copy');
-        const textGoc = btnCopy.innerText;
         
-        // Hiệu ứng đổi chữ thông báo thành công
-        btnCopy.innerText = "Đã sao chép! ✓";
-        btnCopy.style.backgroundColor = "#155724";
+        btnCopy.innerHTML = '<i class="fa-solid fa-check"></i> Đã sao chép!';
+        btnCopy.style.backgroundColor = "#2b6cb0";
         
-        // Trả lại trạng thái nút ban đầu sau 2 giây
         setTimeout(() => {
-            btnCopy.innerText = textGoc;
-            btnCopy.style.backgroundColor = "#28a745";
-        }, 2000);
+            btnCopy.innerHTML = '<i class="fa-solid fa-copy"></i> Copy All';
+            btnCopy.style.backgroundColor = "var(--primary-color)";
+        }, 1500);
     }).catch(err => {
         alert('Lỗi khi sao chép: ', err);
     });
