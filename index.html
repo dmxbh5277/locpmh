@@ -10,12 +10,14 @@
         :root {
             --primary-color: #0066cc;
             --primary-hover: #0052a3;
+            --success-color: #2b6cb0;
+            --danger-color: #e53e3e;
+            --danger-hover: #c53030;
             --bg-body: #f4f7fc;
             --bg-card: #ffffff;
             --text-main: #2d3748;
             --text-muted: #718096;
             --border-color: #e2e8f0;
-            --success-color: #2b6cb0;
             --success-bg: #ebf8ff;
         }
 
@@ -24,7 +26,7 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
-            padding: 20px 10px; /* Thu nhỏ padding ngoài trên mobile */
+            padding: 20px 10px;
             display: flex;
             justify-content: center;
         }
@@ -33,7 +35,7 @@
             width: 100%;
             max-width: 850px;
             background: var(--bg-card);
-            padding: 20px; /* Thu nhỏ từ 35px xuống 20px để tăng không gian hiển thị */
+            padding: 20px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 102, 204, 0.08);
             box-sizing: border-box;
@@ -44,7 +46,7 @@
             text-align: center;
             margin-top: 5px;
             margin-bottom: 25px;
-            font-size: 22px; /* Tối ưu kích thước tiêu đề */
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: -0.5px;
             display: flex;
@@ -57,17 +59,23 @@
             margin-bottom: 20px;
         }
 
+        .vung-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
         label {
             font-weight: 600;
             display: block;
-            margin-bottom: 8px;
             color: #4a5568;
             font-size: 14px;
         }
 
         input[type="text"], textarea {
             width: 100%;
-            padding: 14px 16px; /* Tăng chiều cao vùng bấm */
+            padding: 14px 16px;
             border: 2px solid var(--border-color);
             border-radius: 10px;
             box-sizing: border-box;
@@ -89,6 +97,26 @@
             font-family: inherit;
         }
 
+        .btn-phu {
+            background-color: transparent;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-phu:hover {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
         .ket-qua-header {
             display: flex;
             justify-content: space-between;
@@ -100,7 +128,7 @@
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px; /* Tăng kích thước nút bấm trên mobile */
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
@@ -112,8 +140,12 @@
             box-shadow: 0 4px 6px rgba(0, 102, 204, 0.15);
         }
 
-        #btn-copy:hover {
+        #btn-copy:hover:not(:disabled) {
             background-color: var(--primary-hover);
+        }
+
+        #btn-copy.copied {
+            background-color: var(--success-color) !important;
         }
 
         #btn-copy:disabled {
@@ -129,13 +161,12 @@
             border-radius: 10px;
             min-height: 60px;
             white-space: pre-line;
-            /* Thay đổi font sang SFMono/Roboto Mono để chữ gọn, không bị gãy dòng lung tung */
             font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 14px; 
             font-weight: 600;
             color: #2b6cb0;
             box-sizing: border-box;
-            word-break: break-all; /* Đảm bảo an toàn nếu chuỗi quá dài */
+            word-break: break-all;
         }
 
         .empty-state {
@@ -145,21 +176,19 @@
             font-weight: 400;
             font-size: 14px;
         }
+        
+        .error-state {
+            color: #e53e3e;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+        }
 
-        /* Tối ưu hóa riêng cho màn hình Máy tính (Màn hình lớn) */
         @media (min-width: 768px) {
-            body {
-                padding: 40px 20px;
-            }
-            .container {
-                padding: 35px;
-            }
-            h2 {
-                font-size: 26px;
-            }
-            #ket-qua {
-                font-size: 16px;
-            }
+            body { padding: 40px 20px; }
+            .container { padding: 35px; }
+            h2 { font-size: 26px; }
+            #ket-qua { font-size: 16px; }
         }
     </style>
 </head>
@@ -169,12 +198,17 @@
     <h2><i class="fa-solid fa-filter"></i> BỘ LỌC DỮ LIỆU PMH</h2>
 
     <div class="vung">
-        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm</label>
-        <input type="text" id="tim-kiem" placeholder="Nhập ký tự cần tìm..." oninput="locDuLieu()">
+        <div class="vung-header">
+            <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm</label>
+        </div>
+        <input type="text" id="tim-kiem" placeholder="Nhập ký tự cần tìm..." oninput="luuVaLocDuLieu()">
     </div>
 
     <div class="vung">
-        <label for="input-data"><i class="fa-solid fa-clipboard-list" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 2: Nhập hoặc Dán chuỗi Data dữ liệu gốc</label>
+        <div class="vung-header">
+            <label for="input-data"><i class="fa-solid fa-clipboard-list" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 2: Nhập hoặc Dán chuỗi Data dữ liệu gốc</label>
+            <button class="btn-phu" onclick="xoaData()"><i class="fa-solid fa-trash-can"></i> Xóa Data</button>
+        </div>
         <textarea id="input-data" rows="7" placeholder="Dán toàn bộ dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
     </div>
 
@@ -192,66 +226,92 @@
 </div>
 
 <script>
-let kếtQuảHiệnTại = [];
+let ketQuaHienTai = [];
+
+// Tự động khôi phục từ khóa cũ khi F5 tải lại trang
+window.onload = function() {
+    const tuKhoaDaLuu = localStorage.getItem('tuKhoaPMH');
+    if (tuKhoaDaLuu) {
+        document.getElementById('tim-kiem').value = tuKhoaDaLuu;
+        locDuLieu(); // Chạy lọc luôn nếu trước đó đã có data dán sẵn (hoặc chờ dán data)
+    }
+}
+
+function luuVaLocDuLieu() {
+    const giaTriTimKiem = document.getElementById('tim-kiem').value;
+    // Lưu từ khóa vào localStorage để không mất khi F5
+    localStorage.setItem('tuKhoaPMH', giaTriTimKiem);
+    locDuLieu();
+}
+
+function xoaData() {
+    const inputData = document.getElementById('input-data');
+    inputData.value = ''; // Xóa sạch nội dung trong textarea
+    inputData.focus();    // Tự động đưa con trỏ chuột vào lại ô dán dữ liệu
+    locDuLieu();          // Cập nhật lại trạng thái hiển thị của kết quả
+}
 
 function locDuLieu() {
-    const tuKhoa = document.getElementById('tim-kiem').value.trim().toLowerCase();
+    const tuKhoaInput = document.getElementById('tim-kiem').value;
+    const tuKhoa = tuKhoaInput.trim().toLowerCase().replace(/\s+/g, ' ');
     const dataGoc = document.getElementById('input-data').value;
     const vungKetQua = document.getElementById('ket-qua');
     const btnCopy = document.getElementById('btn-copy');
 
-    if (!dataGoc || !tuKhoa) {
+    if (!dataGoc.trim() || !tuKhoa) {
         vungKetQua.innerHTML = '<span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>';
         btnCopy.disabled = true;
-        kếtQuảHiệnTại = [];
+        ketQuaHienTai = [];
         return;
     }
 
-    const cacKhoi = dataGoc.split(/━━━━━━+/);
-    kếtQuảHiệnTại = [];
+    const cacKhoi = dataGoc.split(/━{3,}/);
+    ketQuaHienTai = [];
 
     cacKhoi.forEach(khoi => {
-        const cacDong = khoi.split('\n').map(d => d.trim()).filter(d => d !== "");
+        const cacDong = khoi.split(/\r?\n/).map(d => d.trim()).filter(d => d !== "");
         
         if (cacDong.length >= 2) {
             const dongThongTin = cacDong[0].toLowerCase();
             const dongMuiTen = cacDong[1];
 
             if (dongThongTin.includes(tuKhoa) && dongMuiTen.startsWith('➜')) {
-                kếtQuảHiệnTại.push(dongMuiTen);
+                ketQuaHienTai.push(dongMuiTen);
             }
         }
     });
 
-    if (kếtQuảHiệnTại.length > 0) {
-        vungKetQua.innerText = kếtQuảHiệnTại.join('\n');
+    if (ketQuaHienTai.length > 0) {
+        vungKetQua.textContent = ketQuaHienTai.join('\n');
         btnCopy.disabled = false;
     } else {
-        vungKetQua.innerHTML = "<span style='color: #e53e3e; font-weight: 500;'>❌ Không tìm thấy kết quả nào trùng khớp!</span>";
+        vungKetQua.innerHTML = "<span class='error-state'>❌ Không tìm thấy kết quả nào trùng khớp!</span>";
         btnCopy.disabled = true;
     }
 }
 
 function copyTatCa() {
-    if (kếtQuảHiệnTại.length === 0) return;
+    if (ketQuaHienTai.length === 0) return;
 
-    const vanBanCopy = kếtQuảHiệnTại.join('\n');
+    const vanBanCopy = ketQuaHienTai.join('\n');
 
     navigator.clipboard.writeText(vanBanCopy).then(() => {
         const btnCopy = document.getElementById('btn-copy');
         
         btnCopy.innerHTML = '<i class="fa-solid fa-check"></i> Đã sao chép!';
-        btnCopy.style.backgroundColor = "#2b6cb0";
+        btnCopy.classList.add('copied');
         
         setTimeout(() => {
             btnCopy.innerHTML = '<i class="fa-solid fa-copy"></i> Copy All';
-            btnCopy.style.backgroundColor = "var(--primary-color)";
+            btnCopy.classList.remove('copied');
         }, 1500);
     }).catch(err => {
-        alert('Lỗi khi sao chép: ', err);
+        console.error('Lỗi khi sao chép: ', err);
+        alert('Không thể sao chép tự động. Vui lòng chọn và copy thủ công.');
     });
 }
 </script>
 
 </body>
 </html>
+
