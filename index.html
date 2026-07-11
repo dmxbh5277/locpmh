@@ -199,9 +199,9 @@
 
     <div class="vung">
         <div class="vung-header">
-            <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm</label>
+            <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm (Cách nhau bằng dấu phẩy ",")</label>
         </div>
-        <input type="text" id="tim-kiem" placeholder="Nhập ký tự cần tìm..." oninput="luuVaLocDuLieu()">
+        <input type="text" id="tim-kiem" placeholder="Ví dụ: 43773, 111404, Boss..." oninput="luuVaLocDuLieu()">
     </div>
 
     <div class="vung">
@@ -228,37 +228,40 @@
 <script>
 let ketQuaHienTai = [];
 
-// Tự động khôi phục từ khóa cũ khi F5 tải lại trang
+// Khôi phục từ khóa khi tải lại trang (F5)
 window.onload = function() {
     const tuKhoaDaLuu = localStorage.getItem('tuKhoaPMH');
     if (tuKhoaDaLuu) {
         document.getElementById('tim-kiem').value = tuKhoaDaLuu;
-        locDuLieu(); // Chạy lọc luôn nếu trước đó đã có data dán sẵn (hoặc chờ dán data)
+        locDuLieu();
     }
 }
 
 function luuVaLocDuLieu() {
     const giaTriTimKiem = document.getElementById('tim-kiem').value;
-    // Lưu từ khóa vào localStorage để không mất khi F5
-    localStorage.setItem('tuKhoaPMH', giaTriTimKiem);
+    localStorage.setItem('tuKhoaPMH', giaTriTimKiem); // Lưu chuỗi thô người dùng gõ
     locDuLieu();
 }
 
 function xoaData() {
     const inputData = document.getElementById('input-data');
-    inputData.value = ''; // Xóa sạch nội dung trong textarea
-    inputData.focus();    // Tự động đưa con trỏ chuột vào lại ô dán dữ liệu
-    locDuLieu();          // Cập nhật lại trạng thái hiển thị của kết quả
+    inputData.value = '';
+    inputData.focus();
+    locDuLieu();
 }
 
 function locDuLieu() {
     const tuKhoaInput = document.getElementById('tim-kiem').value;
-    const tuKhoa = tuKhoaInput.trim().toLowerCase().replace(/\s+/g, ' ');
     const dataGoc = document.getElementById('input-data').value;
     const vungKetQua = document.getElementById('ket-qua');
     const btnCopy = document.getElementById('btn-copy');
 
-    if (!dataGoc.trim() || !tuKhoa) {
+    // Tách chuỗi từ khóa bằng dấu phẩy, làm sạch khoảng trắng và lọc bỏ các từ khóa rỗng
+    const danhSachTuKhoa = tuKhoaInput.split(',')
+                                     .map(tk => tk.trim().toLowerCase().replace(/\s+/g, ' '))
+                                     .filter(tk => tk !== "");
+
+    if (!dataGoc.trim() || danhSachTuKhoa.length === 0) {
         vungKetQua.innerHTML = '<span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>';
         btnCopy.disabled = true;
         ketQuaHienTai = [];
@@ -275,7 +278,10 @@ function locDuLieu() {
             const dongThongTin = cacDong[0].toLowerCase();
             const dongMuiTen = cacDong[1];
 
-            if (dongThongTin.includes(tuKhoa) && dongMuiTen.startsWith('➜')) {
+            // Kiểm tra xem dòng thông tin có chứa ÍT NHẤT MỘT từ khóa trong danh sách không
+            const timThay = danhSachTuKhoa.some(tuKhoa => dongThongTin.includes(tuKhoa));
+
+            if (timThay && dongMuiTen.startsWith('➜')) {
                 ketQuaHienTai.push(dongMuiTen);
             }
         }
@@ -297,7 +303,6 @@ function copyTatCa() {
 
     navigator.clipboard.writeText(vanBanCopy).then(() => {
         const btnCopy = document.getElementById('btn-copy');
-        
         btnCopy.innerHTML = '<i class="fa-solid fa-check"></i> Đã sao chép!';
         btnCopy.classList.add('copied');
         
