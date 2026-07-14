@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Lọc Dữ Liệu PMH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LỌC PMH</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,13 +15,13 @@
             --bg-card: #ffffff;
             --text-main: #0f172a; /* Slate đậm sang trọng */
             --text-muted: #64748b;
-            --border-color: #e2e8f0;
+            --border-color: #cbd5e1; /* Làm đậm viền một chút để dễ nhìn trên mobile */
             --success-color: #10b981; /* Xanh lục */
             --success-bg: #f0fdf4;
             --danger-color: #ef4444;
             --danger-bg: #fef2f2;
-            --radius: 12px;
-            --shadow-active: 0 10px 15px -3px rgba(14, 165, 233, 0.1), 0 4px 6px -4px rgba(14, 165, 233, 0.05);
+            --radius: 14px;
+            --shadow-active: 0 10px 15px -3px rgba(14, 165, 233, 0.08), 0 4px 6px -4px rgba(14, 165, 233, 0.03);
         }
 
         body {
@@ -29,10 +29,10 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
-            padding: 40px 20px;
+            padding: 12px 8px; /* Giảm padding viền ngoài tối đa trên mobile để các vùng rộng hơn */
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
             box-sizing: border-box;
         }
@@ -41,71 +41,73 @@
             width: 100%;
             max-width: 850px;
             background: var(--bg-card);
-            padding: 40px;
+            padding: 24px 16px; /* Tối ưu không gian đệm bên trong */
             border-radius: 20px;
             box-shadow: var(--shadow-active);
             border: 1px solid rgba(14, 165, 233, 0.08);
+            box-sizing: border-box;
         }
 
         /* Header Dashboard */
         .dashboard-title {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
         }
 
         h2 {
             color: var(--text-main);
             margin: 0 0 8px 0;
-            font-size: 28px;
+            font-size: 24px; /* Chữ tiêu đề lớn */
             font-weight: 700;
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         h2 i {
             color: var(--primary-color);
             background: var(--primary-light);
-            padding: 10px;
+            padding: 8px;
             border-radius: var(--radius);
-            font-size: 24px;
+            font-size: 20px;
         }
 
         .subtitle {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             margin: 0;
         }
 
         /* Bố cục các vùng */
         .vung {
-            margin-bottom: 10px;
+            margin-bottom: 24px;
         }
 
         label {
-            font-weight: 1200;
+            font-weight: 700; /* Tăng độ đậm chữ */
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 10px;
-            color: #334155;
-            font-size: 14px;
+            color: #1e293b;
+            font-size: 16px; /* Tăng kích thước nhãn Vùng */
+            line-height: 1.4;
         }
 
         label i {
-            font-size: 16px;
+            font-size: 18px;
             color: var(--primary-color);
         }
 
         input[type="text"], textarea {
             width: 100%;
-            padding: 50px 50px;
-            border: 1px solid var(--border-color);
+            padding: 16px; /* Ô nhập liệu to hơn, dễ gõ chạm */
+            border: 1.5px solid var(--border-color);
             border-radius: var(--radius);
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 16px; /* Kích thước chữ nhập vào to rõ, tránh bị iOS tự động phóng to (zoom) */
             transition: all 0.2s ease;
             background-color: #fff;
             color: var(--text-main);
@@ -127,35 +129,37 @@
         /* Tiêu đề kết quả & Nút bấm sao chép */
         .ket-qua-header {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            gap: 10px;
         }
 
         #btn-copy {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 12px 20px; /* Nút to hơn giúp dễ nhấn trên điện thoại */
+            border-radius: 10px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
+            font-weight: 700;
+            font-size: 15px; /* Tăng cỡ chữ nút bấm */
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+            white-space: nowrap;
+            -webkit-tap-highlight-color: transparent; /* Loại bỏ viền xanh khi chạm trên di động */
         }
 
         #btn-copy:hover:not(:disabled) {
             background-color: var(--primary-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
         }
 
         #btn-copy:active:not(:disabled) {
-            transform: translateY(0);
+            transform: scale(0.98); /* Hiệu ứng nhấn mượt trên cảm ứng */
         }
 
         #btn-copy:disabled {
@@ -168,21 +172,21 @@
 
         /* Khung hiển thị kết quả đầu ra */
         .ket-qua-container {
-            border: 1px solid #cbd5e1;
+            border: 1.5px solid var(--border-color);
             border-radius: var(--radius);
             background-color: #f8fafc;
             overflow: hidden;
         }
 
         #ket-qua {
-            min-height: 80px;
-            max-height: 300px;
+            min-height: 100px;
+            max-height: 350px; /* Tăng nhẹ chiều cao hiển thị trên mobile */
             overflow-y: auto;
             white-space: pre-wrap;
             font-family: 'JetBrains Mono', Fira Code, Consolas, monospace;
-            font-size: 14px;
-            font-weight: 500;
-            color: #334155;
+            font-size: 16px; /* Chữ kết quả to và rõ nét hơn */
+            font-weight: 600;
+            color: #1e293b;
             line-height: 1.6;
         }
 
@@ -191,11 +195,12 @@
             color: var(--text-muted);
             font-style: italic;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-weight: 400;
-            font-size: 14px;
+            font-weight: 500;
+            font-size: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
+            line-height: 1.4;
         }
 
         .error-container {
@@ -203,13 +208,44 @@
             align-items: center;
             gap: 8px;
             color: var(--danger-color);
-            font-weight: 600;
+            font-weight: 700;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 14px;
+            font-size: 15px;
             background: var(--danger-bg);
-            padding: 12px 16px;
-            border-radius: 8px;
+            padding: 14px 16px;
+            border-radius: 10px;
             border: 1px solid rgba(239, 68, 68, 0.15);
+            line-height: 1.4;
+        }
+
+        /* Responsive cho máy tính để bàn (Desktop) */
+        @media (min-width: 768px) {
+            body { 
+                padding: 40px 20px; 
+            }
+            .container { 
+                padding: 40px; 
+            }
+            h2 { 
+                font-size: 28px; 
+            }
+            label {
+                font-size: 14px;
+            }
+            input[type="text"], textarea {
+                font-size: 14px;
+                padding: 14px 16px;
+            }
+            #btn-copy {
+                font-size: 13px;
+                padding: 10px 20px;
+            }
+            #ket-qua {
+                font-size: 14px;
+            }
+            .empty-state, .error-container {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -217,23 +253,23 @@
 
 <div class="container">
     <div class="dashboard-title">
-        <h2><i class="fa-solid fa-filter"></i> BỘ LỌC DỮ LIỆU PMH</h2>
+        <h2><i class="fa-solid fa-filter"></i> LỌC PMH</h2>
         <p class="subtitle">Trích xuất chuỗi thông tin tự động theo nhiều điều kiện đồng thời</p>
     </div>
 
     <div class="vung">
-        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass"></i>NHẬP USER QL/TC(Cách nhau bằng dấu phẩy ",")</label>
-        <input type="text" id="tim-kiem" placeholder="Ví dụ: 53136, 78852, ..." oninput="luuVaLocDuLieu()">
+        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass"></i> NHẬP USER QL/TC </label>
+        <input type="text" id="tim-kiem" placeholder="Ví dụ: 43773, 111404, Boss, Tên sản phẩm..." oninput="luuVaLocDuLieu()">
     </div>
 
     <div class="vung">
-        <label for="input-data"><i class="fa-solid fa-database"></i> DÁN PMH MÀ VÙNG GỬI </label>
-        <textarea id="input-data" rows="8" placeholder="Dán toàn bộ dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
+        <label for="input-data"><i class="fa-solid fa-database"></i> DÁN DATA PMH</label>
+        <textarea id="input-data" rows="7" placeholder="Dán toàn bộ dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
     </div>
 
     <div class="vung">
         <div class="ket-qua-header">
-            <label style="margin-bottom: 0;"><i class="fa-solid fa-square-poll-horizontal"></i> PMH ĐÃ LỌC </label>
+            <label style="margin-bottom: 0; margin-top: 0;"><i class="fa-solid fa-square-poll-horizontal"></i> KẾT QUẢ </label>
             <button id="btn-copy" onclick="copyTatCa()" disabled>
                 <i class="fa-solid fa-copy"></i> Copy All
             </button>
