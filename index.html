@@ -4,102 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ Thống Lọc Dữ Liệu PMH</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-family-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #0066cc;
-            --primary-hover: #0052a3;
-            --bg-body: #f4f7fc;
+            --primary-color: #0ea5e9; /* Cyan tươi hiện đại */
+            --primary-hover: #0284c7;
+            --primary-light: #f0f9ff;
+            --bg-body: #f8fafc; /* Màu nền xám nhạt chuẩn Dashboard */
             --bg-card: #ffffff;
-            --text-main: #2d3748;
-            --text-muted: #718096;
+            --text-main: #0f172a; /* Slate đậm sang trọng */
+            --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --success-color: #2b6cb0;
-            --success-bg: #ebf8ff;
+            --success-color: #10b981; /* Xanh lục */
+            --success-bg: #f0fdf4;
+            --danger-color: #ef4444;
+            --danger-bg: #fef2f2;
+            --radius: 12px;
+            --shadow-active: 0 10px 15px -3px rgba(14, 165, 233, 0.1), 0 4px 6px -4px rgba(14, 165, 233, 0.05);
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
             padding: 40px 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .container {
             width: 100%;
             max-width: 850px;
             background: var(--bg-card);
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 102, 204, 0.08);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-active);
+            border: 1px solid rgba(14, 165, 233, 0.08);
+        }
+
+        /* Header Dashboard */
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 35px;
         }
 
         h2 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 30px;
-            font-size: 26px;
+            color: var(--text-main);
+            margin: 0 0 8px 0;
+            font-size: 28px;
             font-weight: 700;
             letter-spacing: -0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
         }
 
+        h2 i {
+            color: var(--primary-color);
+            background: var(--primary-light);
+            padding: 10px;
+            border-radius: var(--radius);
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Bố cục các vùng */
         .vung {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         label {
             font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-            color: #4a5568;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #334155;
             font-size: 14px;
+        }
+
+        label i {
+            font-size: 16px;
+            color: var(--primary-color);
         }
 
         input[type="text"], textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
             box-sizing: border-box;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background-color: #f8fafc;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background-color: #fff;
             color: var(--text-main);
+            font-family: inherit;
         }
 
         input[type="text"]:focus, textarea:focus {
             border-color: var(--primary-color);
             background-color: #fff;
-            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.15);
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
             outline: none;
         }
 
         textarea {
             resize: vertical;
-            font-family: inherit;
+            line-height: 1.6;
         }
 
+        /* Tiêu đề kết quả & Nút bấm sao chép */
         .ket-qua-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         #btn-copy {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 8px 18px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
@@ -107,74 +144,104 @@
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 6px rgba(0, 102, 204, 0.15);
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
         }
 
-        #btn-copy:hover {
+        #btn-copy:hover:not(:disabled) {
             background-color: var(--primary-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0, 102, 204, 0.2);
+            box-shadow: 0 6px 16px rgba(14, 165, 233, 0.3);
         }
 
-        #btn-copy:active {
+        #btn-copy:active:not(:disabled) {
             transform: translateY(0);
         }
 
         #btn-copy:disabled {
-            background-color: #cbd5e1;
+            background-color: #e2e8f0;
             color: #94a3b8;
             cursor: not-allowed;
             box-shadow: none;
             transform: none;
         }
 
-        #ket-qua {
-            background-color: var(--success-bg);
-            border: 2px dashed #90cdf4;
-            border-radius: 10px;
-            min-height: 60px;
-            white-space: pre-line;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 16px;
-            font-weight: 600;
-            color: #2b6cb0;
-            transition: all 0.3s ease;
+        /* Khung hiển thị kết quả đầu ra */
+        .ket-qua-container {
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius);
+            background-color: #f8fafc;
+            overflow: hidden;
         }
 
+        #ket-qua {
+            min-height: 80px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'JetBrains Mono', Fira Code, Consolas, monospace;
+            font-size: 14px;
+            font-weight: 500;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* Các trạng thái rỗng / lỗi */
         .empty-state {
             color: var(--text-muted);
             font-style: italic;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 400;
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--danger-color);
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 14px;
+            background: var(--danger-bg);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.15);
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2><i class="fa-solid fa-filter"></i> BỘ LỌC DỮ LIỆU PMH</h2>
-
-    <div class="vung">
-        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 1: Từ khóa tìm kiếm</label>
-        <input type="text" id="tim-kiem" placeholder="Nhập ký tự, mã số, tên cần tìm tại đây..." oninput="locDuLieu()">
+    <div class="dashboard-title">
+        <h2><i class="fa-solid fa-filter"></i> BỘ LỌC DỮ LIỆU PMH</h2>
+        <p class="subtitle">Trích xuất chuỗi thông tin tự động theo nhiều điều kiện đồng thời</p>
     </div>
 
     <div class="vung">
-        <label for="input-data"><i class="fa-solid fa-clipboard-list" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 2: Nhập hoặc Dán chuỗi Data dữ liệu gốc</label>
+        <label for="tim-kiem"><i class="fa-solid fa-magnifying-glass"></i>NHẬP USER QL/TC(Cách nhau bằng dấu phẩy ",")</label>
+        <input type="text" id="tim-kiem" placeholder="Ví dụ: 53136, 78852, ..." oninput="luuVaLocDuLieu()">
+    </div>
+
+    <div class="vung">
+        <label for="input-data"><i class="fa-solid fa-database"></i> DÁN PMH MÀ VÙNG GỬI </label>
         <textarea id="input-data" rows="8" placeholder="Dán toàn bộ dữ liệu của bạn vào đây..." oninput="locDuLieu()"></textarea>
     </div>
 
     <div class="vung">
         <div class="ket-qua-header">
-            <label style="margin-bottom: 0;"><i class="fa-solid fa-square-poll-horizontal" style="color: var(--primary-color); margin-right: 5px;"></i> Vùng 3: Kết quả lọc được</label>
+            <label style="margin-bottom: 0;"><i class="fa-solid fa-square-poll-horizontal"></i> PMH ĐÃ LỌC </label>
             <button id="btn-copy" onclick="copyTatCa()" disabled>
                 <i class="fa-solid fa-copy"></i> Copy All
             </button>
         </div>
-        <div id="ket-qua" style="padding: 15px;">
-            <span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>
+        <div class="ket-qua-container">
+            <div id="ket-qua" style="padding: 20px;">
+                <span class="empty-state"><i class="fa-solid fa-circle-nodes"></i> Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>
+            </div>
         </div>
     </div>
 </div>
@@ -182,14 +249,35 @@
 <script>
 let kếtQuảHiệnTại = [];
 
+// Tự động khôi phục từ khóa đã lưu ngay sau khi trang web được tải lại (F5)
+window.onload = function() {
+    const tuKhoaDaLuu = localStorage.getItem('tuKhoaPMH_Backup');
+    if (tuKhoaDaLuu) {
+        document.getElementById('tim-kiem').value = tuKhoaDaLuu;
+        locDuLieu(); // Chạy bộ lọc luôn nếu đã có sẵn dữ liệu
+    }
+}
+
+// Hàm vừa lưu từ khóa vào bộ nhớ trình duyệt, vừa thực hiện lọc dữ liệu
+function luuVaLocDuLieu() {
+    const tuKhoaRaw = document.getElementById('tim-kiem').value;
+    localStorage.setItem('tuKhoaPMH_Backup', tuKhoaRaw); // Lưu lại chuỗi gốc
+    locDuLieu();
+}
+
 function locDuLieu() {
-    const tuKhoa = document.getElementById('tim-kiem').value.trim().toLowerCase();
+    const tuKhoaInput = document.getElementById('tim-kiem').value;
     const dataGoc = document.getElementById('input-data').value;
     const vungKetQua = document.getElementById('ket-qua');
     const btnCopy = document.getElementById('btn-copy');
 
-    if (!dataGoc || !tuKhoa) {
-        vungKetQua.innerHTML = '<span class="empty-state">Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>';
+    // Tách chuỗi bằng dấu phẩy, loại bỏ khoảng trắng thừa ở hai đầu và lọc bỏ các ô rỗng
+    const danhSachTuKhoa = tuKhoaInput.split(',')
+                                     .map(tk => tk.trim().toLowerCase())
+                                     .filter(tk => tk !== "");
+
+    if (!dataGoc.trim() || danhSachTuKhoa.length === 0) {
+        vungKetQua.innerHTML = '<span class="empty-state"><i class="fa-solid fa-circle-nodes"></i> Hệ thống đang chờ bạn nhập dữ liệu và từ khóa...</span>';
         btnCopy.disabled = true;
         kếtQuảHiệnTại = [];
         return;
@@ -205,7 +293,10 @@ function locDuLieu() {
             const dongThongTin = cacDong[0].toLowerCase();
             const dongMuiTen = cacDong[1];
 
-            if (dongThongTin.includes(tuKhoa) && dongMuiTen.startsWith('➜')) {
+            // Kiểm tra xem dòng thông tin có chứa ÍT NHẤT MỘT từ khóa trong mảng hay không
+            const timThay = danhSachTuKhoa.some(tuKhoa => dongThongTin.includes(tuKhoa));
+
+            if (timThay && dongMuiTen.startsWith('➜')) {
                 kếtQuảHiệnTại.push(dongMuiTen);
             }
         }
@@ -215,7 +306,7 @@ function locDuLieu() {
         vungKetQua.innerText = kếtQuảHiệnTại.join('\n');
         btnCopy.disabled = false;
     } else {
-        vungKetQua.innerHTML = "<span style='color: #e53e3e; font-weight: 500;'>❌ Không tìm thấy kết quả nào trùng khớp!</span>";
+        vungKetQua.innerHTML = "<div class='error-container'><i class='fa-solid fa-triangle-exclamation'></i> Không tìm thấy kết quả nào trùng khớp!</div>";
         btnCopy.disabled = true;
     }
 }
@@ -229,11 +320,13 @@ function copyTatCa() {
         const btnCopy = document.getElementById('btn-copy');
         
         btnCopy.innerHTML = '<i class="fa-solid fa-check"></i> Đã sao chép!';
-        btnCopy.style.backgroundColor = "#2b6cb0";
+        btnCopy.style.backgroundColor = "#10b981"; 
+        btnCopy.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.3)";
         
         setTimeout(() => {
             btnCopy.innerHTML = '<i class="fa-solid fa-copy"></i> Copy All';
             btnCopy.style.backgroundColor = "var(--primary-color)";
+            btnCopy.style.boxShadow = "0 4px 12px rgba(14, 165, 233, 0.2)";
         }, 1500);
     }).catch(err => {
         alert('Lỗi khi sao chép: ', err);
